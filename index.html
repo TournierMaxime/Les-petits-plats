@@ -1,98 +1,113 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/assets/logo.png">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
 
     <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
     <title>Les petits plats</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
+      <img
+        src="/assets/logo.png"
+        id="logo"
+        alt="logo de la page d'accueil"
+        tabindex="1"
+      />
 
-        <img src="/assets/logo.png" id="logo" alt="logo de la page d'accueil" tabindex="1"/>
-
-            <form method="post" action="">
-                <span class="searchBar">
-                    <input id="searchBarId" type="text" placeholder="Rechercher une recette, un ingrédient ou une description"/>
-                    <i class="fas fa-search"></i>
-                </span>
-            </form>
-
+      <form>
+        <span class="searchBar">
+          <input
+            id="searchBar"
+            type="text"
+            placeholder="Rechercher une recette, un ingrédient ou une description"
+          />
+          <i class="fas fa-search"></i>
+        </span>
+      </form>
     </header>
 
     <main>
-        <div id="champ_mot_cle">
-            <ul id="tag">
-                
-            </ul>
-            
+      <div id="champ_mot_cle">
+        <ul id="tag"></ul>
+      </div>
+      <section class="searchMenu">
+        <div class="global_ingredients">
+          <div class="btn_ingredients">
+            <h2>Ingredients</h2>
+            <i class="fas fa-chevron-down" id="ingredients-down"></i>
+          </div>
+          <div class="list_ingredients">
+            <div class="input_close_ingredients">
+              <input
+                id="input_ingredients"
+                type="text"
+                placeholder="Rechercher un ingrédient"
+              />
+              <i class="fas fa-chevron-up" id="ingredients-up"></i>
+            </div>
+            <div id="ingredients_div"></div>
+          </div>
         </div>
-        <section class="searchMenu">
 
-            <div class="global_ingredients">
-                <div class="btn_ingredients">
-                    <h2>Ingredients</h2>
-                    <i class="fas fa-chevron-down" id="ingredients-down"></i>
-                </div>
-                <div class="list_ingredients">
-                    <div class="input_close_ingredients">
-                        <input id="input_ingredients" type="text"  placeholder ="Rechercher un ingrédient">                       
-                        <i class="fas fa-chevron-up" id="ingredients-up"></i> 
-                    </div>
-                    <div id="ingredients_div">
-
-                    </div>
-                </div>
+        <div class="global_devices">
+          <div class="btn_devices">
+            <h2>Appareils</h2>
+            <i class="fas fa-chevron-down" id="devices-down"></i>
+          </div>
+          <div class="liste_devices">
+            <div class="input_close_devices">
+              <input
+                id="input_devices"
+                type="text"
+                placeholder="Rechercher un appareil"
+              />
+              <i class="fas fa-chevron-up" id="devices-up"></i>
             </div>
+            <div id="devices_div"></div>
+          </div>
+        </div>
 
-            <div class="global_devices">
-                <div class="btn_devices">
-                    <h2>Appareils</h2>
-                    <i class="fas fa-chevron-down" id="devices-down"></i>
-                </div>
-                <div class="liste_devices">
-                    <div class="input_close_devices">
-                        <input id="input_devices" type="text"  placeholder ="Rechercher un appareil">                       
-                        <i class="fas fa-chevron-up" id="devices-up"></i> 
-                    </div>
-                    <div id="devices_div">
-
-                    </div>
-                </div>
+        <div class="global_utensils">
+          <div class="btn_utensils">
+            <h2>Ustensiles</h2>
+            <i class="fas fa-chevron-down" id="utensils-down"></i>
+          </div>
+          <div class="liste_utensils">
+            <div class="input_close_utensils">
+              <input
+                id="input_utensils"
+                type="text"
+                placeholder="Rechercher un ustensile"
+              />
+              <i class="fas fa-chevron-up" id="utensils-up"></i>
             </div>
+            <div id="utensils_div"></div>
+          </div>
+        </div>
+      </section>
 
-            <div class="global_utensils">
-                <div class="btn_utensils">
-                    <h2>Ustensiles</h2>
-                    <i class="fas fa-chevron-down" id="utensils-down"></i>
-                </div>
-                <div class="liste_utensils">
-                    <div class="input_close_utensils">
-                        <input id="input_utensils" type="text"  placeholder ="Rechercher un ustensile">                       
-                        <i class="fas fa-chevron-up" id="utensils-up"></i> 
-                    </div>
-                    <div id="utensils_div">
-
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="recipesCard">
-        </section>
+      <section class="recipesCards"></section>
     </main>
-    <script src="data/recipes.js"></script>
-    <script src="classesJS/ClassDataRecettes.js"></script>
-    <script src="scripts/liste_menu_recherche.js"></script>
-    <script src="scripts/index.js"></script>
-    <script src="scripts/algo_recherche.js"></script>
-</body>
+    <script src="/data/recipes.js"></script>
+    <script src="/scripts/class/recipes.js"></script>
+    <script src="/scripts/utils/cards.js"></script>
+    <script src="/scripts/index.js"></script>
+    <script src="/scripts/utils/searchBar.js"></script>
+  </body>
 </html>
