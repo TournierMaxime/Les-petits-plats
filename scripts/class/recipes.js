@@ -20,15 +20,15 @@ class Recipe {
   }
 
   createCardRecipe() {
-    const card = document.createElement("article")
-    card.className = "recipeCard"
+    this.card = document.createElement("article")
+    this.card.className = "recipeCard"
 
     const image = document.createElement("img")
     // Ajoute le lien de l'image de la recette à la balise img
-    card.appendChild(image)
+    this.card.appendChild(image)
 
     const titleDuration = document.createElement("div")
-    titleDuration.className = "titre_duree"
+    titleDuration.className = "duration"
 
     const title = document.createElement("h1")
     title.textContent = this.name
@@ -41,13 +41,13 @@ class Recipe {
       " min</span>"
     titleDuration.appendChild(duration)
 
-    card.appendChild(titleDuration)
+    this.card.appendChild(titleDuration)
 
     const detail = document.createElement("div")
     detail.className = "detail"
 
     const recipeDetail = document.createElement("div")
-    recipeDetail.className = "detail_recette"
+    recipeDetail.className = "detailRecipe"
 
     const ingredients = this.ingredients
 
@@ -83,17 +83,17 @@ class Recipe {
 
     detail.appendChild(recipeDetail)
 
-    const commentDetail = document.createElement("div")
-    commentDetail.className = "detail_commentaire"
+    const description = document.createElement("div")
+    description.className = "detailDescription"
 
     const comment = document.createElement("p")
     comment.textContent = this.description
-    commentDetail.appendChild(comment)
+    description.appendChild(comment)
 
-    detail.appendChild(commentDetail)
+    detail.appendChild(description)
 
-    card.appendChild(detail)
+    this.card.appendChild(detail)
 
-    return card
+    return this.card
   }
 }

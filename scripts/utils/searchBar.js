@@ -58,11 +58,11 @@ class SearchEngine {
     if (matches.length === 0) {
       app.noResultsFound()
     } else {
+      // Filtre les doublons d'un tableau pour en retourner un nouveau contenant uniquement les éléments uniques
       const uniqueMatches = [...new Set(matches)]
-      app.displayRecette(uniqueMatches)
-      app.displayList(uniqueMatches)
+      app.displayRecipe(uniqueMatches)
+      // app.displayList(uniqueMatches)
 
-      // Retourner les recettes correspondant à la requête, sans doublons
       return uniqueMatches
     }
   }
@@ -73,10 +73,11 @@ const searchEngine = new SearchEngine(recipes)
 const searchBar = document.getElementById("searchBar")
 
 searchBar.addEventListener("input", () => {
+  // SUpprime les espaces blancs inutile
   const query = searchBar.value.trim()
   if (query.length < 3) {
     // Restaurer le contenu initial si la requête est trop courte
-    app.displayRecette(recipes)
+    app.displayRecipe(recipes)
   } else {
     const result = searchEngine.search(query)
     if (result && result.length === 0) {

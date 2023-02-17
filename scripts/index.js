@@ -1,49 +1,49 @@
 class App {
   constructor(recipes) {
     this.recipes = recipes
-    this.cartesRecettes = document.querySelector(".recipesCards")
-    this.tabIngredients = []
+    this.recipesCards = document.querySelector(".recipesCards")
+    /*     this.tabIngredients = []
     this.tabUstensiles = []
-    this.tabAppareils = []
+    this.tabAppliance = [] */
   }
 
-  displayRecette(recipes) {
-    this.cartesRecettes.innerHTML = ""
+  displayRecipe(recipes) {
+    this.recipesCards.innerHTML = ""
 
-    recipes.forEach(({ ...recette }) => {
+    for (let recipe of recipes) {
       const creaData = new Recipe(
-        recette.id,
-        recette.name,
-        recette.servings,
-        recette.ingredients,
-        recette.time,
-        recette.description,
-        recette.appliance,
-        recette.ustensils
+        recipe.id,
+        recipe.name,
+        recipe.servings,
+        recipe.ingredients,
+        recipe.time,
+        recipe.description,
+        recipe.appliance,
+        recipe.ustensils
       )
       const creaCarte = creaData.createCardRecipe()
-      this.cartesRecettes.appendChild(creaCarte)
-    })
+      this.recipesCards.appendChild(creaCarte)
+    }
   }
 
   noResultsFound() {
-    this.cartesRecettes.innerHTML = ""
+    this.recipesCards.innerHTML = ""
 
-    const divnull = document.createElement("div")
-    divnull.id = "pas_de_recette"
-    divnull.textContent =
+    const noResults = document.createElement("div")
+    noResults.id = "noResultsFound"
+    noResults.textContent =
       'Aucune recette ne correspond à vos critères, veuillez modifier votre recherche svp. Vous pouvez chercher "tarte aux pommes", "poisson", etc...'
-    this.cartesRecettes.appendChild(divnull)
+    this.recipesCards.appendChild(noResults)
   }
 
-  displayList(recipe) {
-    this.creaListeFiltre(recipe)
-    this.creaListeDom(this.tabIngredients, "ingredients")
-    this.creaListeDom(this.tabAppareils, "devices")
-    this.creaListeDom(this.tabUstensiles, "utensils")
-  }
+  /*   displayList(recipe) {
+    this.filterList(recipe)
+    this.tagList(this.tabIngredients, "ingredients")
+    this.tagList(this.tabAppliance, "devices")
+    this.tagList(this.tabUstensiles, "utensils") 
+  } */
 
-  creaListeFiltre(recipe) {
+  /*   filterList(recipe) {
     recipe.forEach(({ ingredients, ustensils, appliance }) => {
       ingredients.forEach(({ ingredient }) => {
         if (!this.tabIngredients.includes(ingredient)) {
@@ -55,13 +55,13 @@ class App {
           this.tabUstensiles.push(ustensil)
         }
       })
-      if (!this.tabAppareils.includes(appliance)) {
-        this.tabAppareils.push(appliance)
+      if (!this.tabAppliance.includes(appliance)) {
+        this.tabAppliance.push(appliance)
       }
     })
-  }
+  } */
 
-  creaListeDom(tab, type) {
+  /*   tagList(tab, type) {
     const list = document.getElementById(type + "_div")
     list.innerHTML = ""
 
@@ -76,8 +76,8 @@ class App {
       li.innerHTML = item
       ul.appendChild(li)
     })
-  }
+  } */
 }
 
 const app = new App(recipes)
-app.displayRecette(recipes)
+app.displayRecipe(recipes)
