@@ -11,7 +11,7 @@ class SearchEngine {
   // Méthode pour effectuer une recherche sur les recettes
   search = (query) => {
     // Chercher les recettes qui correspondent à la requête
-    const matches = []
+    this.matches = []
 
     // Convertir la requête en minuscules
     query = query.toLowerCase()
@@ -22,48 +22,39 @@ class SearchEngine {
     }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
-    if (matches.length === 0) {
+    if (this.matches.length === 0) {
       app.noResultsFound()
     }
 
-    for (const recipe of recipes) {
+    for (let recipe of recipes) {
       // Vérifier si le nom de la recette inclut la requête
       if (this.includesIgnoreCase(recipe.name, query)) {
-        matches.push(recipe)
+        this.matches.push(recipe)
       } else {
         // Vérifier si un ingrédient de la recette inclut la requête
-        for (const ingredient of recipe.ingredients) {
+        for (let ingredient of recipe.ingredients) {
           if (this.includesIgnoreCase(ingredient.ingredient, query)) {
-            matches.push(recipe)
+            this.matches.push(recipe)
             break
           }
         }
       }
 
-      // Vérifier si un ustensile de la recette inclut la requête
-      for (const ustensil of recipe.ustensils) {
-        if (this.includesIgnoreCase(ustensil, query)) {
-          matches.push(recipe)
-          break
-        }
-      }
-
       // Vérifier si l'appareil de la recette inclut la requête
-      if (this.includesIgnoreCase(recipe.appliance, query)) {
-        matches.push(recipe)
+      if (this.includesIgnoreCase(recipe.description, query)) {
+        this.matches.push(recipe)
       }
     }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
-    if (matches.length === 0) {
+    if (this.matches.length === 0) {
       app.noResultsFound()
     } else {
       // Filtre les doublons d'un tableau pour en retourner un nouveau contenant uniquement les éléments uniques
-      const uniqueMatches = [...new Set(matches)]
-      app.displayRecipe(uniqueMatches)
-      // app.displayList(uniqueMatches)
+      this.uniqueMatches = [...new Set(this.matches)]
+      app.displayRecipe(this.uniqueMatches)
 
-      return uniqueMatches
+      return this.uniqueMatches
     }
   }
 }
