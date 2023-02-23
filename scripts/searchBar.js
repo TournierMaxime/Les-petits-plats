@@ -11,7 +11,7 @@ class SearchEngine {
   // Méthode pour effectuer une recherche sur les recettes
   search = (query) => {
     // Chercher les recettes qui correspondent à la requête
-    const matches = []
+    this.matches = []
 
     // Convertir la requête en minuscules
     query = query.toLowerCase()
@@ -22,19 +22,19 @@ class SearchEngine {
     }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
-    if (matches.length === 0) {
+    if (this.matches.length === 0) {
       app.noResultsFound()
     }
 
     recipes.map((recipe) => {
       // Vérifier si le nom de la recette inclut la requête
       if (this.includesIgnoreCase(recipe.name, query)) {
-        matches.push(recipe)
+        this.matches.push(recipe)
       } else {
         // Vérifier si un ingrédient de la recette inclut la requête
         recipe.ingredients.map((ingredient) => {
           if (this.includesIgnoreCase(ingredient.ingredient, query)) {
-            matches.push(recipe)
+            this.matches.push(recipe)
             return
           }
         })
@@ -42,20 +42,20 @@ class SearchEngine {
 
       // Vérifier si l'appareil de la recette inclut la requête
       if (this.includesIgnoreCase(recipe.description, query)) {
-        matches.push(recipe)
+        this.matches.push(recipe)
       }
     })
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
-    if (matches.length === 0) {
+    if (this.matches.length === 0) {
       app.noResultsFound()
     } else {
       // Filtre les doublons d'un tableau pour en retourner un nouveau contenant uniquement les éléments uniques
-      const uniqueMatches = [...new Set(matches)]
-      app.displayRecipe(uniqueMatches)
+      this.uniqueMatches = [...new Set(this.matches)]
+      app.displayRecipe(this.uniqueMatches)
       // app.displayList(uniqueMatches)
 
-      return uniqueMatches
+      return this.uniqueMatches
     }
   }
 }
