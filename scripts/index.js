@@ -7,8 +7,8 @@ class App {
   displayRecipe(recipes) {
     this.recipesCards.innerHTML = ""
 
-    for (let recipe of recipes) {
-      const creaData = new Recipe(
+    recipes.map((recipe) => {
+      this.createRecipe = new Recipe(
         recipe.id,
         recipe.name,
         recipe.servings,
@@ -18,19 +18,19 @@ class App {
         recipe.appliance,
         recipe.ustensils
       )
-      const creaCarte = creaData.createCardRecipe()
-      this.recipesCards.appendChild(creaCarte)
-    }
+      this.createCard = this.createRecipe.createCardRecipe()
+      this.recipesCards.appendChild(this.createCard)
+    })
   }
 
   noResultsFound() {
     this.recipesCards.innerHTML = ""
 
-    const noResults = document.createElement("div")
-    noResults.id = "noResultsFound"
-    noResults.textContent =
+    this.noResults = document.createElement("div")
+    this.noResults.id = "noResultsFound"
+    this.noResults.textContent =
       'Aucune recette ne correspond à vos critères, veuillez modifier votre recherche svp. Vous pouvez chercher "tarte aux pommes", "poisson", etc...'
-    this.recipesCards.appendChild(noResults)
+    this.recipesCards.appendChild(this.noResults)
   }
 }
 

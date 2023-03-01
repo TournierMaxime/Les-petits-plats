@@ -23,76 +23,73 @@ class Recipe {
     this.card = document.createElement("article")
     this.card.className = "recipeCard"
 
-    const image = document.createElement("img")
-    // Ajoute le lien de l'image de la recette à la balise img
-    this.card.appendChild(image)
+    this.image = document.createElement("img")
+    this.card.appendChild(this.image)
 
-    const titleDuration = document.createElement("div")
-    titleDuration.className = "duration"
+    this.titleDuration = document.createElement("div")
+    this.titleDuration.className = "duration"
 
-    const title = document.createElement("h1")
-    title.textContent = this.name
-    titleDuration.appendChild(title)
+    this.title = document.createElement("h1")
+    this.title.textContent = this.name
+    this.titleDuration.appendChild(this.title)
 
-    const duration = document.createElement("div")
-    duration.innerHTML =
+    this.duration = document.createElement("div")
+    this.duration.innerHTML =
       '<i class="far fa-clock"></i><span class="time">' +
       this.time +
       " min</span>"
-    titleDuration.appendChild(duration)
+    this.titleDuration.appendChild(this.duration)
 
-    this.card.appendChild(titleDuration)
+    this.card.appendChild(this.titleDuration)
 
-    const detail = document.createElement("div")
-    detail.className = "detail"
+    this.detail = document.createElement("div")
+    this.detail.className = "detail"
 
-    const recipeDetail = document.createElement("div")
-    recipeDetail.className = "detailRecipe"
+    this.recipeDetail = document.createElement("div")
+    this.recipeDetail.className = "detailRecipe"
 
-    const ingredients = this.ingredients
-
-    if (Array.isArray(ingredients) && ingredients.length > 0) {
-      for (const ingredient of ingredients) {
-        const h2 = document.createElement("h2")
+    if (Array.isArray(this.ingredients) && this.ingredients.length > 0) {
+      this.ingredients.map((ingredient) => {
+        this.titleH2 = document.createElement("h2")
         //Ne pas afficher les deux points quand il n'y a pas de quantité
         if (!ingredient.quantity) {
-          h2.textContent = ingredient.ingredient
+          this.titleH2.textContent = ingredient.ingredient
         } else {
-          h2.textContent = ingredient.ingredient + " " + ":"
+          this.titleH2.textContent = ingredient.ingredient + " " + ":"
         }
 
-        recipeDetail.appendChild(h2)
+        this.recipeDetail.appendChild(this.titleH2)
 
-        const quantite = document.createElement("p")
+        this.quantity = document.createElement("p")
 
         //Ne pas afficher de valeur nulle pour unite si elle n'est pas présente dans recipes.js
         if (!ingredient.unit) {
-          quantite.textContent = ingredient.quantity
+          this.quantity.textContent = ingredient.quantity
         }
         //Modifier le mot "grammes" par "g"
         else if (ingredient.unit == "grammes") {
-          quantite.textContent = " " + ingredient.quantity + " " + "g"
+          this.quantity.textContent = " " + ingredient.quantity + " " + "g"
         } else {
-          quantite.textContent =
+          this.quantity.textContent =
             " " + ingredient.quantity + " " + ingredient.unit
         }
 
-        h2.appendChild(quantite)
-      }
+        this.titleH2.appendChild(this.quantity)
+      })
     }
 
-    detail.appendChild(recipeDetail)
+    this.detail.appendChild(this.recipeDetail)
 
-    const description = document.createElement("div")
-    description.className = "detailDescription"
+    this.boxDescription = document.createElement("div")
+    this.boxDescription.className = "detailDescription"
 
-    const comment = document.createElement("p")
-    comment.textContent = this.description
-    description.appendChild(comment)
+    this.comment = document.createElement("p")
+    this.comment.textContent = this.description
+    this.boxDescription.appendChild(this.comment)
 
-    detail.appendChild(description)
+    this.detail.appendChild(this.boxDescription)
 
-    this.card.appendChild(detail)
+    this.card.appendChild(this.detail)
 
     return this.card
   }
