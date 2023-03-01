@@ -1,4 +1,4 @@
-class Recipe {
+export default class Recipe {
   constructor(
     id,
     name,

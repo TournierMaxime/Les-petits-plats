@@ -132,8 +132,8 @@
   border-radius: 5px;
 }
 .list_ingredients,
-.liste_devices,
-.liste_utensils {
+.list_devices,
+.list_utensils {
   width: 40%;
   height: 500px;
   position: absolute;
