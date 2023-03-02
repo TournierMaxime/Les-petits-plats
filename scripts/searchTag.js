@@ -30,12 +30,14 @@ class SearchEngineTag {
     // On parcours le tableau des recettes et on pousse chaque recette dans son tableau correspondant
     recipes.forEach((recipe) => {
       recipe.ingredients.map((ingredient) => {
-        this.tabIngredients.push(ingredient.ingredient)
+        this.tabIngredients.push(
+          this.capitalizeFirstLetter(ingredient.ingredient)
+        )
       })
       recipe.ustensils.map((ustensile) => {
-        this.tabUtensils.push(ustensile)
+        this.tabUtensils.push(this.capitalizeFirstLetter(ustensile))
       })
-      this.tabDevices.push(recipe.appliance)
+      this.tabDevices.push(this.capitalizeFirstLetter(recipe.appliance))
     })
 
     // On supprime les doublons
@@ -275,6 +277,10 @@ class SearchEngineTag {
     openBtnUstensile.style.display = "block"
     ListeUstensiles.style.display = "none"
     btnUstensile.style.transform = "translateX(0)"
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
   }
 }
 
