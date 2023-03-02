@@ -54,7 +54,7 @@ class SearchEngine {
         }
       })
     } else {
-      searchEngineTag.filtreTag()
+      searchEngineTag.filterRecipesBySelectedTags()
       this.matches = recipes
     }
 

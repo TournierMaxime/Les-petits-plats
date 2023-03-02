@@ -5,28 +5,30 @@ import { searchEngine } from "./searchBar.js"
 class SearchEngineTag {
   constructor(recipes) {
     this.recipes = recipes
+    // initialise pour stocker les recettes filtrées
     this.filteredRecipes = recipes
 
-    this.divListeIng = document.getElementById("ingredients_div")
-    this.divListeApp = document.getElementById("devices_div")
-    this.divListeUst = document.getElementById("utensils_div")
-
-    this.ulTag = document.getElementById("tag")
-
+    // stock les tags par tableaux
     this.tabIngredients = []
     this.tabUtensils = []
     this.tabDevices = []
+
+    // Interaction avec le DOM
+    this.divListeIng = document.getElementById("ingredients_div")
+    this.divListeApp = document.getElementById("devices_div")
+    this.divListeUst = document.getElementById("utensils_div")
+    this.ulTag = document.getElementById("tag")
   }
 
   //          CREATION DES TABLEAUX BOUTONS FILTRE
 
-  creaListeFiltre(recipes) {
+  generateDistinctTagsArrays(recipes) {
     this.tabIngredients = []
     this.tabUtensils = []
     this.tabDevices = []
 
+    // On parcours le tableau des recettes et on pousse chaque recette dans son tableau correspondant
     recipes.forEach((recipe) => {
-      //Je fais mon tableau
       recipe.ingredients.map((ingredient) => {
         this.tabIngredients.push(ingredient.ingredient)
       })
@@ -36,7 +38,7 @@ class SearchEngineTag {
       this.tabDevices.push(recipe.appliance)
     })
 
-    //Je trie pour supp les doublons
+    // On supprime les doublons
     this.tabIngredients = [...new Set(this.tabIngredients)].sort()
     this.tabUtensils = [...new Set(this.tabUtensils)].sort()
     this.tabDevices = [...new Set(this.tabDevices)].sort()
@@ -44,8 +46,8 @@ class SearchEngineTag {
 
   //          CREATION DES LISTES BOUTONS FILTRE
 
-  createList(tabTag, id) {
-    //........je crée un UL et des LI generique.............
+  createTagList(tag, id) {
+    // On creer les listes par tags
     this.divList = document.getElementById(id + "_div")
     this.divList.innerHTML = ""
 
@@ -54,7 +56,7 @@ class SearchEngineTag {
 
     this.divList.appendChild(this.ul)
 
-    tabTag.forEach((e) => {
+    tag.forEach((e) => {
       this.li = document.createElement("li")
       this.li.className = "li_" + id
       this.li.innerHTML = e
@@ -62,21 +64,20 @@ class SearchEngineTag {
     })
   }
 
-  //              RECHERCHE AVEC BOUTON FILTRE
+  // Gère le filtrage des recettes en fonction des tags sélectionnés
 
-  filterBtn(tabTag, id) {
+  filterRecipesByTags(tag, id) {
+    //On récupère la valeur de l'input de recherche associé
     this.inputBtn = document.getElementById("input_" + id)
-
     this.searchBar = this.inputBtn.value
-
-    //Je filtre en fonction des 3 caractères saisis
+    this.suggestion = ""
+    //On Filtre les tags en fonction de cette valeur
+    //Si la valeur a moins de 3 caractères, la liste complète des tags est affichée
     if (this.searchBar.length >= 3) {
-      let result = tabTag.filter((el) =>
+      let result = tag.filter((el) =>
         el.toLowerCase().includes(this.searchBar.toLowerCase())
       )
 
-      this.suggestion = ""
-      //Je parcour le tableau de resultat et j'affiche les suggestions
       result.forEach(
         (el) =>
           (this.suggestion += `
@@ -85,18 +86,15 @@ class SearchEngineTag {
 
       document.getElementById(id).innerHTML = this.suggestion
     } else {
-      this.createList(tabTag, id)
+      // Sinon, seuls les tags contenant la chaîne de caractères saisie sont affichés
+      this.createTagList(tag, id)
     }
+    // La méthode app.displayFilterBtn est appelée à chaque saisie pour mettre à jour les résultats affichés
     this.inputBtn.addEventListener("input", app.displayFilterBtn)
   }
 
-  //      APPARITION DES TAGS SELECTIONNES
-  // construction de la zone tag selectionne
-
-  //............ESSAI DE REFACTORISATION .............
-
-  //Création des balises du Dom pour les tags
-  creaTagDom(e, id) {
+  //Cette méthode est appelée lorsqu'un tag est sélectionné
+  createTagElement(e, id) {
     this.liTag = document.createElement("li")
     this.liTag.className = "li_" + id
     this.liTag.id = "li_" + e.target.textContent
@@ -115,10 +113,9 @@ class SearchEngineTag {
     this.liTag.appendChild(this.iTag)
     this.ulTag.appendChild(this.liTag)
   }
-  //**************************************************************************************** */
 
-  //fonction de suppression du tag avec la croix
-
+  // Cette méthode est appelée lorsqu'un tag est supprimé
+  // Elle met également à jour les tableaux de tags sélectionnés et filtre les recettes en conséquence
   closeTag(e) {
     this.ulTag.removeChild(e.target.parentNode)
 
@@ -130,32 +127,26 @@ class SearchEngineTag {
 
     this.filteredRecipes = this.recipes
 
-    this.filtreTag()
+    this.filterRecipesBySelectedTags()
     searchEngine.search()
 
     app.displayRecipe(this.filteredRecipes)
     app.displayList(this.filteredRecipes)
   }
 
-  //*************************************************************************************** */
-
-  //Filtre entre les tags et les recettes
-
-  //création de tableau vide des tags
-
-  filtreTag() {
+  // Cette méthode filtre les recettes en fonction des tags sélectionnés
+  filterRecipesBySelectedTags() {
     this.tabIngredients = []
     this.tabUtensils = []
     this.tabDevices = []
-    //remise à zéro des tableau des tags
 
-    //récupère le li qui est contenu dans ultag(element enfant)
+    // On parcourt la liste des tags sélectionnés dans le DOM pour remplir les tableaux de tags
+
     Array.from(this.ulTag.children).forEach((e) => {
       if (e.children[0].className == "span_utensils") {
-        //si l'element enfant à la class span_ustensiles
         this.tabUtensils.push(e.children[0].textContent.toLowerCase())
-        //je le mets dans le tableau des ustensiles
       }
+
       if (e.children[0].className == "span_devices") {
         this.tabDevices.push(e.children[0].textContent.toLowerCase())
       }
@@ -167,6 +158,8 @@ class SearchEngineTag {
 
     // every : teste si tous les element d'un tableau verifient une condition, renvoie true
     // some : teste si au moins un element du tableau passe le test, renvoie booleen
+
+    // On utilise ensuite ces tableaux pour filtrer les recettes en fonction des tags sélectionnés
 
     if (this.ulTag.childElementCount > 0) {
       //si ultag contient quelque chose
@@ -192,6 +185,8 @@ class SearchEngineTag {
         )
       })
 
+      // Les recettes filtrées sont stockées dans filteredRecipes et sont affichées à l'aide des méthodes app.displayRecipe et app.displayList.
+
       this.filteredRecipes = resultTag
     } else {
       this.filteredRecipes = this.recipes
@@ -200,9 +195,7 @@ class SearchEngineTag {
     app.displayList(this.filteredRecipes)
   }
 
-  //....................OUVERTURE DES LISTES
-
-  openListeIngredients(
+  openIngredientsList(
     openBtnIngredient,
     ListeIngredients,
     ListeAppareils,
@@ -222,7 +215,7 @@ class SearchEngineTag {
     btnUstensile.style.transform = "translateX(300px)"
   }
 
-  openListeAppareils(
+  openDevicesList(
     openBtnAppareil,
     ListeAppareils,
     ListeIngredients,
@@ -242,7 +235,7 @@ class SearchEngineTag {
     btnAppareil.style.transform = "translateX(0px)"
   }
 
-  openListeUstensiles(
+  openUtensilsList(
     openBtnUstensile,
     ListeUstensiles,
     ListeIngredients,
@@ -260,9 +253,7 @@ class SearchEngineTag {
     btnAppareil.style.transform = "translateX(-10px)"
   }
 
-  //................FERMETURE DES LISTES
-
-  closeListeIngredients(
+  closeIngredientsList(
     openBtnIngredient,
     ListeIngredients,
     btnAppareil,
@@ -274,13 +265,13 @@ class SearchEngineTag {
     btnUstensile.style.transform = "translateX(0)"
   }
 
-  closeListeAppareils(openBtnAppareil, ListeAppareils, btnUstensile) {
+  closeDevicesList(openBtnAppareil, ListeAppareils, btnUstensile) {
     openBtnAppareil.style.display = "block"
     ListeAppareils.style.display = "none"
     btnUstensile.style.transform = "translateX(0)"
   }
 
-  closeListeUstensiles(openBtnUstensile, ListeUstensiles, btnUstensile) {
+  closeUtensilsList(openBtnUstensile, ListeUstensiles, btnUstensile) {
     openBtnUstensile.style.display = "block"
     ListeUstensiles.style.display = "none"
     btnUstensile.style.transform = "translateX(0)"

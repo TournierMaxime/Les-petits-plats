@@ -28,17 +28,20 @@ class App {
   }
 
   displayList(recipes) {
-    searchEngineTag.creaListeFiltre(recipes)
-    searchEngineTag.createList(searchEngineTag.tabIngredients, "ingredients")
-    searchEngineTag.createList(searchEngineTag.tabDevices, "devices")
-    searchEngineTag.createList(searchEngineTag.tabUtensils, "utensils")
+    searchEngineTag.generateDistinctTagsArrays(recipes)
+    searchEngineTag.createTagList(searchEngineTag.tabIngredients, "ingredients")
+    searchEngineTag.createTagList(searchEngineTag.tabDevices, "devices")
+    searchEngineTag.createTagList(searchEngineTag.tabUtensils, "utensils")
   }
 
   //Renseigne la fonction filtreBtn pour les paramètres
   displayFilterBtn() {
-    searchEngineTag.filterBtn(searchEngineTag.tabIngredients, "ingredients")
-    searchEngineTag.filterBtn(searchEngineTag.tabDevices, "devices")
-    searchEngineTag.filterBtn(searchEngineTag.tabUtensils, "utensils")
+    searchEngineTag.filterRecipesByTags(
+      searchEngineTag.tabIngredients,
+      "ingredients"
+    )
+    searchEngineTag.filterRecipesByTags(searchEngineTag.tabDevices, "devices")
+    searchEngineTag.filterRecipesByTags(searchEngineTag.tabUtensils, "utensils")
   }
 
   noResultsFound() {
@@ -78,7 +81,7 @@ searchEngineTag.divListeApp = document.getElementById("devices_div")
 searchEngineTag.divListeUst = document.getElementById("utensils_div")
 
 openBtnIngredient.addEventListener("click", () => {
-  searchEngineTag.openListeIngredients(
+  searchEngineTag.openIngredientsList(
     openBtnIngredient,
     ListeIngredients,
     ListeAppareils,
@@ -91,7 +94,7 @@ openBtnIngredient.addEventListener("click", () => {
 })
 
 openBtnAppareil.addEventListener("click", () => {
-  searchEngineTag.openListeAppareils(
+  searchEngineTag.openDevicesList(
     openBtnAppareil,
     ListeAppareils,
     ListeIngredients,
@@ -104,7 +107,7 @@ openBtnAppareil.addEventListener("click", () => {
 })
 
 openBtnUstensile.addEventListener("click", () => {
-  searchEngineTag.openListeUstensiles(
+  searchEngineTag.openUtensilsList(
     openBtnUstensile,
     ListeUstensiles,
     ListeIngredients,
@@ -116,7 +119,7 @@ openBtnUstensile.addEventListener("click", () => {
 })
 
 closeIngredient.addEventListener("click", () => {
-  searchEngineTag.closeListeIngredients(
+  searchEngineTag.closeIngredientsList(
     openBtnIngredient,
     ListeIngredients,
     btnAppareil,
@@ -125,7 +128,7 @@ closeIngredient.addEventListener("click", () => {
 })
 
 closeAppareil.addEventListener("click", () => {
-  searchEngineTag.closeListeAppareils(
+  searchEngineTag.closeDevicesList(
     openBtnAppareil,
     ListeAppareils,
     btnUstensile
@@ -133,22 +136,23 @@ closeAppareil.addEventListener("click", () => {
 })
 
 closeUstensile.addEventListener("click", () => {
-  searchEngineTag.closeListeUstensiles(
+  searchEngineTag.closeUtensilsList(
     openBtnUstensile,
     ListeUstensiles,
     btnUstensile
   )
 })
 
-//evenement au click sur un mot de la liste
+// Evenement au click sur un mot de la liste
 searchEngineTag.divListeIng.addEventListener("click", (e) => {
   if (
     searchEngineTag.tabIngredients.includes(e.target.textContent.toLowerCase())
   ) {
-    //permet de ne pas selectionner 2 fois le même mot de la liste
+    searchEngineTag.createTagElement(e, "ingredients")
+    searchEngineTag.filterRecipesBySelectedTags()
   } else {
-    searchEngineTag.creaTagDom(e, "ingredients") //j'appel la fonction de créa dans le dom
-    searchEngineTag.filtreTag() // j'appel la fonction de trie des recettes en relation avec les tags
+    searchEngineTag.createTagElement(e, "ingredients")
+    searchEngineTag.filterRecipesBySelectedTags()
   }
 })
 
@@ -156,16 +160,20 @@ searchEngineTag.divListeUst.addEventListener("click", (e) => {
   if (
     searchEngineTag.tabUtensils.includes(e.target.textContent.toLowerCase())
   ) {
+    searchEngineTag.createTagElement(e, "utensils")
+    searchEngineTag.filterRecipesBySelectedTags()
   } else {
-    searchEngineTag.creaTagDom(e, "utensils")
-    searchEngineTag.filtreTag()
+    searchEngineTag.createTagElement(e, "utensils")
+    searchEngineTag.filterRecipesBySelectedTags()
   }
 })
 
 searchEngineTag.divListeApp.addEventListener("click", (e) => {
   if (searchEngineTag.tabDevices.includes(e.target.textContent.toLowerCase())) {
+    searchEngineTag.createTagElement(e, "devices")
+    searchEngineTag.filterRecipesBySelectedTags()
   } else {
-    searchEngineTag.creaTagDom(e, "devices")
-    searchEngineTag.filtreTag()
+    searchEngineTag.createTagElement(e, "devices")
+    searchEngineTag.filterRecipesBySelectedTags()
   }
 })

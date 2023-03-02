@@ -82,6 +82,7 @@
   font-size: 18px;
   margin-right: 10px;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 /*......................BOUTON DE FILTRE....................*/
@@ -134,7 +135,7 @@
 .list_ingredients,
 .list_devices,
 .list_utensils {
-  width: 40%;
+  width: 40em;
   height: 500px;
   position: absolute;
   border-radius: 5px;
