@@ -7,6 +7,7 @@ class SearchEngineTag {
     this.recipes = recipes
     // initialise pour stocker les recettes filtrées
     this.filteredRecipes = recipes
+    this.lastSearchResult = []
 
     // stock les tags par tableaux
     this.tabIngredients = []
@@ -19,8 +20,6 @@ class SearchEngineTag {
     this.divListeUst = document.getElementById("utensils_div")
     this.ulTag = document.getElementById("tag")
   }
-
-  //          CREATION DES TABLEAUX BOUTONS FILTRE
 
   generateDistinctTagsArrays(recipes) {
     this.tabIngredients = []
@@ -40,15 +39,13 @@ class SearchEngineTag {
       this.tabDevices.push(this.capitalizeFirstLetter(recipe.appliance))
     })
 
-    // On supprime les doublons
+    // On supprime les doublons puis on trie par ordre alphabétique
     this.tabIngredients = [...new Set(this.tabIngredients)].sort()
     this.tabUtensils = [...new Set(this.tabUtensils)].sort()
     this.tabDevices = [...new Set(this.tabDevices)].sort()
   }
 
-  //          CREATION DES LISTES BOUTONS FILTRE
-
-  createTagList(tag, id) {
+  createTagList(arrayTag, id) {
     // On creer les listes par tags
     this.divList = document.getElementById(id + "_div")
     this.divList.innerHTML = ""
@@ -58,7 +55,7 @@ class SearchEngineTag {
 
     this.divList.appendChild(this.ul)
 
-    tag.forEach((e) => {
+    arrayTag.forEach((e) => {
       this.li = document.createElement("li")
       this.li.className = "li_" + id
       this.li.innerHTML = e
@@ -68,15 +65,15 @@ class SearchEngineTag {
 
   // Gère le filtrage des recettes en fonction des tags sélectionnés
 
-  filterRecipesByTags(tag, id) {
+  filterRecipesByTags(arrayTag, id) {
     //On récupère la valeur de l'input de recherche associé
     this.inputBtn = document.getElementById("input_" + id)
     this.searchBar = this.inputBtn.value
     this.suggestion = ""
     //On Filtre les tags en fonction de cette valeur
-    //Si la valeur a moins de 3 caractères, la liste complète des tags est affichée
+    // Seuls les tags contenant la chaîne de caractères saisie sont affichés
     if (this.searchBar.length >= 3) {
-      let result = tag.filter((el) =>
+      let result = arrayTag.filter((el) =>
         el.toLowerCase().includes(this.searchBar.toLowerCase())
       )
 
@@ -88,8 +85,8 @@ class SearchEngineTag {
 
       document.getElementById(id).innerHTML = this.suggestion
     } else {
-      // Sinon, seuls les tags contenant la chaîne de caractères saisie sont affichés
-      this.createTagList(tag, id)
+      //Sinon la valeur a moins de 3 caractères, la liste complète des tags est affichée
+      this.createTagList(arrayTag, id)
     }
     // La méthode app.displayFilterBtn est appelée à chaque saisie pour mettre à jour les résultats affichés
     this.inputBtn.addEventListener("input", app.displayFilterBtn)
@@ -119,21 +116,54 @@ class SearchEngineTag {
   // Cette méthode est appelée lorsqu'un tag est supprimé
   // Elle met également à jour les tableaux de tags sélectionnés et filtre les recettes en conséquence
   closeTag(e) {
+    // Supprimer le tag
     this.ulTag.removeChild(e.target.parentNode)
 
-    this.tabIngredients.splice(e)
+    // Mettre à jour les tableaux de tags
+    this.tabIngredients = Array.from(
+      this.ulTag.querySelectorAll(".span_ingredients")
+    ).map((e) => e.textContent.toLowerCase())
 
-    this.tabDevices.splice(e)
+    this.tabDevices = Array.from(
+      this.ulTag.querySelectorAll(".span_devices")
+    ).map((e) => e.textContent.toLowerCase())
 
-    this.tabUtensils.splice(e)
+    this.tabUtensils = Array.from(
+      this.ulTag.querySelectorAll(".span_utensils")
+    ).map((e) => e.textContent.toLowerCase())
 
-    this.filteredRecipes = this.recipes
+    // Exécuter une nouvelle recherche en tenant compte des tags restants
+    if (
+      this.tabIngredients.length > 0 ||
+      this.tabDevices.length > 0 ||
+      this.tabUtensils.length > 0
+    ) {
+      // S'il y a des tags, filtrer les recettes correspondantes
+      let filteredRecipes = this.lastSearchResult.filter((recipe) => {
+        return (
+          this.tabDevices.every((app) =>
+            recipe.appliance.toLowerCase().includes(app)
+          ) &&
+          this.tabUtensils.every((ust) =>
+            recipe.ustensils.some((ustensile) =>
+              ustensile.toLowerCase().includes(ust)
+            )
+          ) &&
+          this.tabIngredients.every((ing) =>
+            recipe.ingredients.some((ingredient) =>
+              ingredient.ingredient.toLowerCase().includes(ing)
+            )
+          )
+        )
+      })
 
-    this.filterRecipesBySelectedTags()
-    searchEngine.search()
-
-    app.displayRecipe(this.filteredRecipes)
-    app.displayList(this.filteredRecipes)
+      // Afficher les résultats de la recherche filtrée
+      app.displayRecipe(filteredRecipes)
+      app.displayList(filteredRecipes)
+    } else {
+      // S'il n'y a plus de tags, réexécuter la dernière recherche générale
+      searchEngine.search()
+    }
   }
 
   // Cette méthode filtre les recettes en fonction des tags sélectionnés
@@ -164,16 +194,13 @@ class SearchEngineTag {
     // On utilise ensuite ces tableaux pour filtrer les recettes en fonction des tags sélectionnés
 
     if (this.ulTag.childElementCount > 0) {
-      //si ultag contient quelque chose
+      // On filtre les tableaux
       let resultTag = this.recipes.filter((recipe) => {
-        //je parcours les recettes
+        // On teste si les éléments des tableaux sont inclus dans les recettes
         return (
-          //et je retourne, la comparaison entre les tableaux et les recettes
-          //test si tous les éléments contenus dans tab...sont inclus dans au moins une recette
           this.tabDevices.every((app) =>
             recipe.appliance.toLowerCase().includes(app)
           ) &&
-          //test sur tous les elements du tableau crée et parcours du tableau initial pour verifier au moins un element
           this.tabUtensils.every((ust) =>
             recipe.ustensils.some((ustensile) =>
               ustensile.toLowerCase().includes(ust)
@@ -187,14 +214,14 @@ class SearchEngineTag {
         )
       })
 
-      // Les recettes filtrées sont stockées dans filteredRecipes et sont affichées à l'aide des méthodes app.displayRecipe et app.displayList.
+      // Les recettes filtrées sont stockées dans filteredRecipes
 
-      this.filteredRecipes = resultTag
+      this.lastSearchResult = resultTag
     } else {
-      this.filteredRecipes = this.recipes
+      this.lastSearchResult = this.recipes
     }
-    app.displayRecipe(this.filteredRecipes)
-    app.displayList(this.filteredRecipes)
+    app.displayRecipe(this.lastSearchResult)
+    app.displayList(this.lastSearchResult)
   }
 
   openIngredientsList(

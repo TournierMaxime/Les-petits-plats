@@ -22,9 +22,9 @@ class SearchEngine {
     this.inputValue = this.inputValue.toLowerCase()
 
     // Vérifier que la requête est suffisamment longue
-    /*     if (query.length < 3) {
+    if (this.inputValue.length < 3) {
       return []
-    } */
+    }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
     if (this.matches.length === 0) {

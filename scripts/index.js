@@ -28,13 +28,15 @@ class App {
   }
 
   displayList(recipes) {
+    // Affiche une liste de tags distincts
     searchEngineTag.generateDistinctTagsArrays(recipes)
+    // Crée et affiche des éléments d'interface utilisateur pour chaque tableau de tags
     searchEngineTag.createTagList(searchEngineTag.tabIngredients, "ingredients")
     searchEngineTag.createTagList(searchEngineTag.tabDevices, "devices")
     searchEngineTag.createTagList(searchEngineTag.tabUtensils, "utensils")
   }
 
-  //Renseigne la fonction filtreBtn pour les paramètres
+  // Affiche des boutons de filtre pour chaque tags
   displayFilterBtn() {
     searchEngineTag.filterRecipesByTags(
       searchEngineTag.tabIngredients,
