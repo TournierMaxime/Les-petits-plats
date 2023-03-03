@@ -164,6 +164,8 @@ class SearchEngineTag {
       // S'il n'y a plus de tags, réexécuter la dernière recherche générale
       searchEngine.search()
     }
+    // Mettre à jour la liste des résultats de la recherche en fonction des tags restants
+    //
   }
 
   // Cette méthode filtre les recettes en fonction des tags sélectionnés

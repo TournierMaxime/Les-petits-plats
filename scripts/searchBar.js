@@ -1,6 +1,7 @@
 import recipes from "../data/recipes.js"
 import { app } from "./index.js"
 import { searchEngineTag } from "./searchTag.js"
+
 class SearchEngine {
   constructor(recipes) {
     this.recipes = recipes
@@ -22,16 +23,17 @@ class SearchEngine {
     this.inputValue = this.inputValue.toLowerCase()
 
     // Vérifier que la requête est suffisamment longue
-    if (this.inputValue.length < 3) {
+    if (
+      this.inputValue.length < 3 &&
+      searchEngineTag.ulTag.childElementCount === 0
+    ) {
       return []
     }
 
-    // Afficher un message d'erreur si aucun résultat n'est trouvé
-    if (this.matches.length === 0) {
-      app.noResultsFound()
-    }
-
-    if (this.inputValue.length >= 3) {
+    if (
+      this.inputValue.length >= 3 ||
+      searchEngineTag.ulTag.childElementCount > 0
+    ) {
       recipes.map((recipe) => {
         // Vérifier si le nom de la recette inclut la requête
         if (this.includesIgnoreCase(recipe.name, this.inputValue)) {
@@ -48,14 +50,16 @@ class SearchEngine {
           })
         }
 
-        // Vérifier si l'appareil de la recette inclut la requête
+        // Vérifier si la description de la recette inclut la requête
         if (this.includesIgnoreCase(recipe.description, this.inputValue)) {
           this.matches.push(recipe)
         }
       })
-    } else {
-      searchEngineTag.filterRecipesBySelectedTags()
-      this.matches = recipes
+
+      // Si des tags sont sélectionnés, filtrer les recettes correspondantes
+      if (searchEngineTag.ulTag.childElementCount > 0) {
+        this.matches = searchEngineTag.filterRecipesBySelectedTags(this.matches)
+      }
     }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
@@ -77,10 +81,11 @@ export const searchEngine = new SearchEngine(recipes)
 const searchBar = document.getElementById("searchBar")
 
 searchBar.addEventListener("input", () => {
-  // SUpprime les espaces blancs inutile
+  // Supprimer les espaces blancs inutiles
   const query = searchBar.value.trim()
-  if (query.length < 3) {
-    // Restaurer le contenu initial si la requête est trop courte
+
+  if (query.length < 3 && searchEngineTag.ulTag.childElementCount === 0) {
+    // Restaurer le contenu initial si la requête est trop courte et aucun tag n'est sélectionné
     app.displayRecipe(recipes)
   } else {
     const result = searchEngine.search()
