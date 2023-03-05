@@ -157,15 +157,69 @@ class SearchEngineTag {
         )
       })
 
+      // Vérifier s'il y a une recherche générale en cours
+      if (searchEngine.inputValue) {
+        // Si oui, filtrer les résultats de la recherche générale
+        filteredRecipes = filteredRecipes.filter((recipe) => {
+          return (
+            searchEngine.includesIgnoreCase(
+              recipe.name,
+              searchEngine.inputValue
+            ) ||
+            recipe.ingredients.some((ingredient) =>
+              searchEngine.includesIgnoreCase(
+                ingredient.ingredient,
+                searchEngine.inputValue
+              )
+            ) ||
+            searchEngine.includesIgnoreCase(
+              recipe.description,
+              searchEngine.inputValue
+            )
+          )
+        })
+      }
+
       // Afficher les résultats de la recherche filtrée
       app.displayRecipe(filteredRecipes)
       app.displayList(filteredRecipes)
+
+      this.filteredRecipes = filteredRecipes
     } else {
       // S'il n'y a plus de tags, réexécuter la dernière recherche générale
-      searchEngine.search()
+      if (searchEngine.inputValue) {
+        // Si oui, filtrer les résultats de la recherche générale
+        let filteredRecipes = this.recipes.filter((recipe) => {
+          return (
+            searchEngine.includesIgnoreCase(
+              recipe.name,
+              searchEngine.inputValue
+            ) ||
+            recipe.ingredients.some((ingredient) =>
+              searchEngine.includesIgnoreCase(
+                ingredient.ingredient,
+                searchEngine.inputValue
+              )
+            ) ||
+            searchEngine.includesIgnoreCase(
+              recipe.description,
+              searchEngine.inputValue
+            )
+          )
+        })
+
+        app.displayRecipe(filteredRecipes)
+        app.displayList(filteredRecipes)
+
+        this.filteredRecipes = filteredRecipes
+      } else {
+        this.filteredRecipes = this.recipes
+        app.displayRecipe(this.filteredRecipes)
+        app.displayList(this.filteredRecipes)
+      }
     }
-    // Mettre à jour la liste des résultats de la recherche en fonction des tags restants
-    //
+
+    //this.filterRecipesBySelectedTags()
   }
 
   // Cette méthode filtre les recettes en fonction des tags sélectionnés
@@ -197,7 +251,7 @@ class SearchEngineTag {
 
     if (this.ulTag.childElementCount > 0) {
       // On filtre les tableaux
-      let resultTag = this.recipes.filter((recipe) => {
+      let resultTag = this.filteredRecipes.filter((recipe) => {
         // On teste si les éléments des tableaux sont inclus dans les recettes
         return (
           this.tabDevices.every((app) =>
@@ -212,18 +266,34 @@ class SearchEngineTag {
             recipe.ingredients.some((ingredient) =>
               ingredient.ingredient.toLowerCase().includes(ing)
             )
-          )
+          ) &&
+          // On vérifie également que la recette correspond à la requête générale, si elle existe
+          (!searchEngine.inputValue ||
+            searchEngine.includesIgnoreCase(
+              recipe.name,
+              searchEngine.inputValue
+            ) ||
+            recipe.ingredients.some((ingredient) =>
+              searchEngine.includesIgnoreCase(
+                ingredient.ingredient,
+                searchEngine.inputValue
+              )
+            ) ||
+            searchEngine.includesIgnoreCase(
+              recipe.description,
+              searchEngine.inputValue
+            ))
         )
       })
 
       // Les recettes filtrées sont stockées dans filteredRecipes
 
-      this.lastSearchResult = resultTag
+      this.filteredRecipes = resultTag
     } else {
-      this.lastSearchResult = this.recipes
+      this.filteredRecipes = this.recipes
     }
-    app.displayRecipe(this.lastSearchResult)
-    app.displayList(this.lastSearchResult)
+    app.displayRecipe(this.filteredRecipes)
+    app.displayList(this.filteredRecipes)
   }
 
   openIngredientsList(
@@ -310,6 +380,22 @@ class SearchEngineTag {
 
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  }
+
+  // Méthode pour supprimer tous les tags sélectionnés
+  clearTags() {
+    // Supprimer tous les éléments du DOM dans la liste des tags
+    this.ulTag.innerHTML = ""
+
+    // Vider les tableaux de tags
+    this.tabIngredients = []
+    this.tabUtensils = []
+    this.tabDevices = []
+
+    // Afficher toutes les recettes
+    this.filteredRecipes = app.recipes
+    app.displayRecipe(this.filteredRecipes)
+    app.displayList(this.filteredRecipes)
   }
 }
 

@@ -94,3 +94,11 @@ searchBar.addEventListener("input", () => {
     }
   }
 })
+
+// Ajouter un écouteur d'événements pour détecter la touche "Enter" et réinitialiser la liste des tags si nécessaire
+searchBar.addEventListener("keydown", (event) => {
+  if (event.key === "Backspace" && searchBar.value.length === 1) {
+    searchEngineTag.clearTags()
+    searchEngine.search()
+  }
+})
