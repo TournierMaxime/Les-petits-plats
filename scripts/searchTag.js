@@ -27,7 +27,7 @@ class SearchEngineTag {
     this.tabDevices = []
 
     // On parcours le tableau des recettes et on pousse chaque recette dans son tableau correspondant
-    recipes.forEach((recipe) => {
+    this.recipes.forEach((recipe) => {
       recipe.ingredients.map((ingredient) => {
         this.tabIngredients.push(
           this.capitalizeFirstLetter(ingredient.ingredient)
@@ -139,7 +139,7 @@ class SearchEngineTag {
       this.tabUtensils.length > 0
     ) {
       // S'il y a des tags, filtrer les recettes correspondantes
-      let filteredRecipes = this.lastSearchResult.filter((recipe) => {
+      let filteredRecipes = this.recipes.filter((recipe) => {
         return (
           this.tabDevices.every((app) =>
             recipe.appliance.toLowerCase().includes(app)
@@ -153,14 +153,23 @@ class SearchEngineTag {
             recipe.ingredients.some((ingredient) =>
               ingredient.ingredient.toLowerCase().includes(ing)
             )
-          )
+          ) &&
+          (!searchEngine.inputValue ||
+            searchEngine.includesIgnoreCase(recipe.name, searchEngine.inputValue) ||
+            recipe.ingredients.some((ingredient) =>
+              searchEngine.includesIgnoreCase(
+                ingredient.ingredient,
+                searchEngine.inputValue
+              )
+            ) ||
+            searchEngine.includesIgnoreCase(recipe.description, searchEngine.inputValue))
         )
       })
 
       // Vérifier s'il y a une recherche générale en cours
       if (searchEngine.inputValue) {
         // Si oui, filtrer les résultats de la recherche générale
-        filteredRecipes = filteredRecipes.filter((recipe) => {
+        filteredRecipes = this.recipes.filter((recipe) => {
           return (
             searchEngine.includesIgnoreCase(
               recipe.name,
@@ -183,8 +192,6 @@ class SearchEngineTag {
       // Afficher les résultats de la recherche filtrée
       app.displayRecipe(filteredRecipes)
       app.displayList(filteredRecipes)
-
-      this.filteredRecipes = filteredRecipes
     } else {
       // S'il n'y a plus de tags, réexécuter la dernière recherche générale
       if (searchEngine.inputValue) {
@@ -251,7 +258,7 @@ class SearchEngineTag {
 
     if (this.ulTag.childElementCount > 0) {
       // On filtre les tableaux
-      let resultTag = this.filteredRecipes.filter((recipe) => {
+      let resultTag = this.recipes.filter((recipe) => {
         // On teste si les éléments des tableaux sont inclus dans les recettes
         return (
           this.tabDevices.every((app) =>
@@ -289,6 +296,7 @@ class SearchEngineTag {
       // Les recettes filtrées sont stockées dans filteredRecipes
 
       this.filteredRecipes = resultTag
+      
     } else {
       this.filteredRecipes = this.recipes
     }

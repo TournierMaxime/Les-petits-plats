@@ -58,21 +58,20 @@ class SearchEngine {
 
       // Si des tags sont sélectionnés, filtrer les recettes correspondantes
       if (searchEngineTag.ulTag.childElementCount > 0) {
-        this.matches = searchEngineTag.filterRecipesBySelectedTags(this.matches)
+        this.matches = searchEngineTag.filterRecipesBySelectedTags()
       }
     }
 
     // Afficher un message d'erreur si aucun résultat n'est trouvé
     if (this.matches.length === 0) {
       app.noResultsFound()
-    } else {
-      // Filtre les doublons d'un tableau pour en retourner un nouveau contenant uniquement les éléments uniques
-      this.uniqueMatches = [...new Set(this.matches)]
-      app.displayRecipe(this.uniqueMatches)
-      app.displayList(this.uniqueMatches)
-
-      return this.uniqueMatches
-    }
+    } 
+          // Filtre les doublons d'un tableau pour en retourner un nouveau contenant uniquement les éléments uniques
+          this.uniqueMatches = [...new Set(this.matches)]
+          app.displayRecipe(this.uniqueMatches)
+          app.displayList(this.uniqueMatches)
+    
+          return this.uniqueMatches
   }
 }
 
@@ -89,6 +88,7 @@ searchBar.addEventListener("input", () => {
     app.displayRecipe(recipes)
   } else {
     const result = searchEngine.search()
+    
     if (result && result.length === 0) {
       app.noResultsFound()
     }
