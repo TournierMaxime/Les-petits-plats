@@ -27,7 +27,7 @@ class SearchEngineTag {
     this.tabDevices = []
 
     // On parcours le tableau des recettes et on pousse chaque recette dans son tableau correspondant
-    this.recipes.forEach((recipe) => {
+    recipes.forEach((recipe) => {
       recipe.ingredients.map((ingredient) => {
         this.tabIngredients.push(
           this.capitalizeFirstLetter(ingredient.ingredient)
@@ -155,14 +155,20 @@ class SearchEngineTag {
             )
           ) &&
           (!searchEngine.inputValue ||
-            searchEngine.includesIgnoreCase(recipe.name, searchEngine.inputValue) ||
+            searchEngine.includesIgnoreCase(
+              recipe.name,
+              searchEngine.inputValue
+            ) ||
             recipe.ingredients.some((ingredient) =>
               searchEngine.includesIgnoreCase(
                 ingredient.ingredient,
                 searchEngine.inputValue
               )
             ) ||
-            searchEngine.includesIgnoreCase(recipe.description, searchEngine.inputValue))
+            searchEngine.includesIgnoreCase(
+              recipe.description,
+              searchEngine.inputValue
+            ))
         )
       })
 
@@ -296,7 +302,6 @@ class SearchEngineTag {
       // Les recettes filtrées sont stockées dans filteredRecipes
 
       this.filteredRecipes = resultTag
-      
     } else {
       this.filteredRecipes = this.recipes
     }
