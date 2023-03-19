@@ -147,35 +147,50 @@ closeUstensile.addEventListener("click", () => {
 
 // Evenement au click sur un mot de la liste
 searchEngineTag.divListeIng.addEventListener("click", (e) => {
-  if (
-    searchEngineTag.tabIngredients.includes(e.target.textContent.toLowerCase())
-  ) {
-    searchEngineTag.createTagElement(e, "ingredients")
-    searchEngineTag.filterRecipesBySelectedTags()
-  } else {
-    searchEngineTag.createTagElement(e, "ingredients")
-    searchEngineTag.filterRecipesBySelectedTags()
+  if (e.target.tagName.toLowerCase() === "li") {
+    if (
+      searchEngineTag.tabIngredients.includes(
+        e.target.textContent.toLowerCase()
+      )
+    ) {
+      searchEngineTag.createTagElement(e, "ingredients");
+      searchEngineTag.filterRecipesBySelectedTags();
+    } else {
+      searchEngineTag.createTagElement(e, "ingredients");
+      searchEngineTag.filterRecipesBySelectedTags();
+    }
   }
-})
+});
 
 searchEngineTag.divListeUst.addEventListener("click", (e) => {
-  if (
-    searchEngineTag.tabUtensils.includes(e.target.textContent.toLowerCase())
-  ) {
-    searchEngineTag.createTagElement(e, "utensils")
-    searchEngineTag.filterRecipesBySelectedTags()
-  } else {
-    searchEngineTag.createTagElement(e, "utensils")
-    searchEngineTag.filterRecipesBySelectedTags()
+  if (e.target.tagName.toLowerCase() === "li") {
+    if (
+      searchEngineTag.tabUtensils.includes(
+        e.target.textContent.toLowerCase()
+      )
+    ) {
+      searchEngineTag.createTagElement(e, "utensils");
+      searchEngineTag.filterRecipesBySelectedTags();
+    } else {
+      searchEngineTag.createTagElement(e, "utensils");
+      searchEngineTag.filterRecipesBySelectedTags();
+    }
   }
-})
+});
 
 searchEngineTag.divListeApp.addEventListener("click", (e) => {
-  if (searchEngineTag.tabDevices.includes(e.target.textContent.toLowerCase())) {
-    searchEngineTag.createTagElement(e, "devices")
-    searchEngineTag.filterRecipesBySelectedTags()
-  } else {
-    searchEngineTag.createTagElement(e, "devices")
-    searchEngineTag.filterRecipesBySelectedTags()
+  if (e.target.tagName.toLowerCase() === "li") {
+    if (
+      searchEngineTag.tabDevices.includes(
+        e.target.textContent.toLowerCase()
+      )
+    ) {
+      searchEngineTag.createTagElement(e, "devices");
+      searchEngineTag.filterRecipesBySelectedTags();
+    } else {
+      searchEngineTag.createTagElement(e, "devices");
+      searchEngineTag.filterRecipesBySelectedTags();
+    }
   }
-})
+});
+
